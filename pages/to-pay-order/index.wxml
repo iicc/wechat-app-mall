@@ -1,5 +1,5 @@
 <view class="container">
-     <form bindsubmit="createOrder">
+     <form bindsubmit="createOrder" report-submit="true">
      <view class="address-box" wx:if="{{isNeedLogistics > 0}}">
         <view class="add-address" hidden="{{curAddressData}}">
             <view class="title" bindtap="addAddress">新增收货地址</view>
@@ -48,12 +48,14 @@
           <picker-view indicator-style="height: 50rpx;" style="width: 100%; height: 150rpx;" value="0" bindchange="bindChangeCoupon">
             <picker-view-column>
               <view style="line-height: 50px">不使用优惠券</view>
-              <view wx:for="{{coupons}}" style="line-height: 50px">{{item.money}}元 {{item.name}}</view>
+              <view wx:for="{{coupons}}" wx:key="id" style="line-height: 50px">{{item.money}}元 {{item.name}}</view>
             </picker-view-column>
           </picker-view>
         </view>
      </view>
-     <view class="goods-info">
+
+
+     <view class="goods-info" wx:if="{{(isNeedLogistics > 0 && yunPrice > 0) || (!hasNoCoupons)}}">
         <view class="row-box" wx:if="{{isNeedLogistics > 0 && yunPrice > 0}}">
             <view class="row-label">商品金额</view>
             <view class="right-text">¥ {{allGoodsPrice}}</view>
@@ -67,9 +69,10 @@
             <view class="right-text">- ¥ {{youhuijine}}</view>
         </view>
      </view>
+
      <view class="jiesuan-box">
         <view class="left-price">
-            <view class="total">合计：¥ {{allGoodsAndYunPrice - youhuijine}}</view>
+            <view class="total">合计：¥ {{allGoodsAndYunPrice - youhuijine}} + {{totalScoreToPay}} 积分</view>
         </view>
         <button class="to-pay-btn" formType="submit">提交订单</button>
     </view>
